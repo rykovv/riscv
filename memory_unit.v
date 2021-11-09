@@ -1,7 +1,7 @@
 module memory_unit
 #(
-  parameter MEMSIZE = `IMEMSIZE,
-  WORDSIZE = `WORDSIZE
+  parameter MEMSIZE = 64,
+  WORDSIZE = 64
 ) (
   input wren, rden,           // write and read enables
   input [MEMSIZE-1:0] addr,   // write/read address
@@ -16,6 +16,8 @@ module memory_unit
       mem[addr] = d;
     else if (rden)
       q = mem[addr];
+    else
+      q = {WORDSIZE{1'bx}};
   end
 
 endmodule
