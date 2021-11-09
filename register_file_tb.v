@@ -1,11 +1,12 @@
 `include "register_file.v"
-`define ADDRSIZE    4
-`define WORDSIZE    8
+`define ADDRSIZE    2
+`define WORDSIZE    4
 
 module register_file_tb();
-  reg regrw;
+  reg regwr;
   reg [`ADDRSIZE-1:0] rs1, rs2, rd;
-  reg [`WORDSIZE-1:0] rs1data, rs2data, rddata;
+  reg [`WORDSIZE-1:0] rddata;
+  wire [`WORDSIZE-1:0] rs1data, rs2data;
 
   register_file #(
     .ADDRSIZE(`ADDRSIZE),
@@ -22,29 +23,21 @@ module register_file_tb();
 
   initial
   begin : stimulus
-    regwr = 1;
-    $display("writing into the memory");
-    for (i = 0; i < `MEMSIZE; i=i+1)
-    begin
-      addr = i; din = `MEMSIZE-i-1;
-      #2;
-    end
-    $display("reading from the memory");
-    #2 wren = 0; rden = 1;
-    for (i = 0; i < `MEMSIZE; i=i+1)
-    begin
-      #2 addr = `MEMSIZE-i-1;
-    end
-    #2 rden = 0; addr = 5;
+    #0 regwr = 1; rd = 0; rddata = 10; rs1 = 0; rs2 = 0;
+    #2 rd = 1; rddata = 5; rs2 = 1;
+    #2 rd = 2; rddata = 7; rs1 = 2;
+    #2 rd = 3; rddata = 2; rs2 = 3;
+    #2 rs1 = 0; rs2 = 2;
+    #2 regwr = 0; rd = 0; rddata = 0; rs1 = 0;
   end
 
   initial
   begin : monitoring
-    $display("TIME  	WREN  	RDEN  	ADDR  	D 	Q");
-    $monitor("%2d 	%b  	%b  	%d  	%d  	%d", $time, wren, rden, addr, din, q);
+    $display("TIME  	REGWR  	RS1  	RSD1  	RS2 	RSD2	RD	RDD");
+    $monitor("%2d 	%b  	%d  	%d  	%d  	%d	%d	%d", $time, regwr, rs1, rs1data, rs2, rs2data, rd, rddata);
     $vcdpluson;
   end
  
-  initial #(`MEMSIZE*4 + 4 + 10) $finish;
+  initial #50 $finish;
 
 endmodule
