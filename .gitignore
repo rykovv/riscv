@@ -2,3 +2,4 @@ csrc*
 simv*
 *.key
 *.vpd
+token.txt
