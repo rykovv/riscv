@@ -3,3 +3,4 @@ simv*
 *.key
 *.vpd
 token.txt
+.nfs*
