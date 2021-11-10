@@ -14,7 +14,7 @@ module alu #(
     
   always @(*) 
   begin
-    case (CTL):
+    case (CTL)
       AND: R = A & B;
       OR : R = A | B;
       ADD: R = A + B;
