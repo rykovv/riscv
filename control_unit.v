@@ -17,16 +17,16 @@ module control_unit (
   begin
     case (instruction)
       RT: begin
-        
+        { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b00100010;
       end
       LW: begin
-
+        { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b11110000;
       end
       SW: begin
-
+        { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b1x001000;
       end
       BEQ: begin
-
+        { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b0x000101;
       end
   end
 
