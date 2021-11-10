@@ -16,8 +16,9 @@ module register_file
   input [WORDSIZE-1:0] rddata,		// write register data
   output reg [WORDSIZE-1:0] rs1data, rs2data	// source registers data
 );
+  localparam RFSIZE = 1 << ADDRSIZE;
 
-  reg [WORDSIZE-1:0] file [0:ADDRSIZE-1];
+  reg [WORDSIZE-1:0] file [RFSIZE-1:0];
 
   always @(*) begin
     if (regwr)

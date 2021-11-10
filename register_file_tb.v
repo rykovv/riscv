@@ -27,8 +27,8 @@ module register_file_tb();
     #2 rd = 1; rddata = 5; rs2 = 1;
     #2 rd = 2; rddata = 7; rs1 = 2;
     #2 rd = 3; rddata = 2; rs2 = 3;
-    #2 rs1 = 0; rs2 = 2;
-    #2 regwr = 0; rd = 0; rddata = 0; rs1 = 0;
+    #2 regwr = 0; rs1 = 0; rs2 = 2;
+    #2 rd = 0; rddata = 0; rs1 = 0;
   end
 
   initial
