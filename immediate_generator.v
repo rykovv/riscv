@@ -3,7 +3,7 @@ module immediate_generator #(
   IMMSIZE = 64
 ) (
   input [INSTRSIZE-1:0] instruction,
-  output reg [IMMSIZE-1:0] immediate
+  output reg signed [IMMSIZE-1:0] immediate
 );
   localparam RT = 7'b0110011,
 	     LW = 7'b0000011,
@@ -20,7 +20,7 @@ module immediate_generator #(
         immediate = { {52{instruction[31]}}, instruction[31:25], instruction[11:7] };
       end
       BEQ: begin
-        immediate = { {51{instruction[31]}}, instruction[31], instruction[7], instruction[30:25], instruction[11:8], 0 };
+        immediate = { {51{instruction[31]}}, instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0 };
       end
     endcase
   end
