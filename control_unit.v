@@ -28,6 +28,7 @@ module control_unit (
       BEQ: begin
         { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b0x000101;
       end
+    endcase
   end
 
 endmodule
