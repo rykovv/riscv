@@ -9,6 +9,7 @@ module control_unit (
   output reg [1:0] aluop
 );
   localparam RT = 7'b0110011,
+	     IT = 7'b0010011, // ADDI
 	     LW = 7'b0000011,
 	     SW = 7'b0100011,
 	    BEQ = 7'b1100011;
@@ -19,7 +20,7 @@ module control_unit (
       RT: begin
         { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b00100010;
       end
-      LW: begin
+      IT, LW: begin
         { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b11110000;
       end
       SW: begin
