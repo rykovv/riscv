@@ -1,13 +1,14 @@
 module memory_unit
 #(
-  parameter MEMSIZE = 64,
+  parameter ADDRSIZE = 64,
   WORDSIZE = 64
 ) (
   input wren, rden,           // write and read enables
-  input [MEMSIZE-1:0] addr,   // write/read address
+  input [ADDRSIZE-1:0] addr,   // write/read address
   input [WORDSIZE-1:0] d,     // data in
   output reg [WORDSIZE-1:0] q // data out
 );
+  localparam MEMSIZE = 1 << ADDRSIZE;
 
   reg [WORDSIZE-1:0] mem [0:MEMSIZE-1];
 
