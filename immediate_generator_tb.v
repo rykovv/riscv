@@ -19,14 +19,14 @@ module immediate_generator_tb();
   initial
   begin : stimulus
     // load          / immediate /
-    #0 instruction = 111111001110_00001_000_01110_0010011; exp_immediate = -50;
-    #2 instruction = 000000001111_00001_000_01110_0010011; exp_immediate = 15;
+    #0 instruction = 32'b111111001110_00001_000_01110_0010011; exp_immediate = -50;
+    #2 instruction = 32'b000000001111_00001_000_01110_0010011; exp_immediate = 15;
     // store         / 11-5 /               / 4-0 /
-    #2 instruction = 1111110_01110_00010_010_01110_0100011; exp_immediate = -50;
-    #2 instruction = 0000000_01110_00010_010_01111_0100011; exp_immediate = 15;
+    #2 instruction = 32'b1111110_01110_00010_010_01110_0100011; exp_immediate = -50;
+    #2 instruction = 32'b0000000_01110_00010_010_01111_0100011; exp_immediate = 15;
     // branch
-    #2 instruction = 1_111100_01010_10011_000_1110_1_1100011; exp_immediate = -50;
-    #2 instruction = 0_000000_01010_10011_000_0111_0_1100011; exp_immediate = -50;
+    #2 instruction = 32'b1_111100_01010_10011_000_1110_1_1100011; exp_immediate = -100;
+    #2 instruction = 32'b0_000000_01010_10011_000_0111_0_1100011; exp_immediate = 14;
   end
 
   always @(*)
