@@ -10,6 +10,7 @@ module register_file
   parameter ADDRSIZE = 5,
   WORDSIZE = 64
 ) (
+  input rst,
   input regwr,          		// register write enable
   input [ADDRSIZE-1:0] rs1, rs2,   	// source registers addresses
   input [ADDRSIZE-1:0] rd,		// write register address
@@ -26,6 +27,13 @@ module register_file
     
     rs1data = file[rs1];
     rs2data = file[rs2];
+  end
+
+  integer i;
+  always @(negedge rst)
+  begin
+    for (i = 0; i < RFSIZE; i=i+1)
+      file[i] <= 0;
   end
 
 endmodule

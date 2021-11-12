@@ -1,4 +1,5 @@
 module control_unit (
+  input rst,
   input [6:0] instruction, // opcode
   output reg branch,
   output reg memread,
@@ -20,7 +21,10 @@ module control_unit (
       RT: begin
         { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b00100010;
       end
-      IT, LW: begin
+      IT: begin
+        { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b10100000;
+      end
+      LW: begin
         { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b11110000;
       end
       SW: begin
@@ -30,6 +34,11 @@ module control_unit (
         { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b0x000101;
       end
     endcase
+  end
+
+  always @(negedge rst)
+  begin
+    { alusrc, memtoreg, regwrite, memread, memwrite, branch, aluop } = 8'b00000000;
   end
 
 endmodule

@@ -11,7 +11,10 @@
 `define WORDSIZE    32
 `define DWORDSIZE   64
 
-module riscv(input clk);
+module riscv(
+  input clk,
+  input rst
+);
   // instruction memory
   reg [`DWORDSIZE-1:0] PC;
   wire [`WORDSIZE-1:0] instruction;
@@ -33,6 +36,7 @@ module riscv(input clk);
     .ADDRSIZE(`IMEMSIZE),
     .WORDSIZE(`WORDSIZE)
   ) instruction_memory (
+    .rst(rst),
     .wren(1'b0),
     .rden(1'b1),
     .addr(PC[7:0]), // assuming 256B memory
@@ -41,6 +45,7 @@ module riscv(input clk);
   );
 
   control_unit cu (
+    .rst(rst),
     .instruction(instruction[6:0]), // opcode
     .branch(branch),
     .memread(memread),
@@ -55,6 +60,7 @@ module riscv(input clk);
     .ADDRSIZE(`REGADDRSIZE),
     .WORDSIZE(`DWORDSIZE)
   ) rf (
+    .rst(rst),
     .regwr(regwrite),
     .rs1(instruction[19:15]),
     .rs2(instruction[24:20]),
@@ -68,11 +74,13 @@ module riscv(input clk);
     .INSTRSIZE(`WORDSIZE),
     .IMMSIZE(`DWORDSIZE)
   ) ig (
+    .rst(rst),
     .instruction(instruction),
     .immediate(immediate)
   );
   
   alu_control ac (
+    .rst(rst),
     .instruction( {instruction[30], instruction[14:12]} ),
     .aluop(aluop),
     .alucmd(alucmd)
@@ -81,6 +89,7 @@ module riscv(input clk);
   alu #(
     .WORDSIZE(`DWORDSIZE)
   ) alu (
+    .rst(rst),
     .A(rs1data), .B( alusrc ? immediate : rs2data ),
     .CTL(alucmd),
     .R(alures), .Z(aluz)
@@ -90,6 +99,7 @@ module riscv(input clk);
     .ADDRSIZE(`DMEMSIZE),
     .WORDSIZE(`DWORDSIZE)
   ) data_memory (
+    .rst(rst),
     .wren(memwrite),
     .rden(memread),
     .addr(alures[7:0]), // assuming 256B memory
@@ -97,9 +107,10 @@ module riscv(input clk);
     .q(readdata)
   );
 
-  always @(posedge clk)
+  always @(posedge clk, negedge rst)
   begin
-    PC <= branch && aluz ? PC + immediate : PC + 4;
+    if (!rst) PC <= 0;
+    else      PC <= branch && aluz ? PC + immediate : PC + 1;
   end
 
 endmodule

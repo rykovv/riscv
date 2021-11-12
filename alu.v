@@ -1,6 +1,7 @@
 module alu #(
   parameter WORDSIZE = 64
 ) (
+  input rst,
   input [WORDSIZE-1:0] A, B,
   input [3:0] CTL,
   output Z,
@@ -23,5 +24,10 @@ module alu #(
   end
 
   assign Z = ~(|R);
+
+  always @(negedge rst)
+  begin
+    R <= 0;
+  end
 
 endmodule
