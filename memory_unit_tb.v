@@ -1,19 +1,20 @@
 `include "memory_unit.v"
-`define MEMSIZE     16
+`define ADDRSIZE    16
 `define WORDSIZE    4
 
 module memory_unit_tb();
   wire [`WORDSIZE-1:0] q;
-  reg wren, rden;
-  reg [`MEMSIZE-1:0] addr;
+  reg rst, wren, rden;
+  reg [`ADDRSIZE-1:0] addr;
   reg [`WORDSIZE-1:0] din;
 
-  reg [`MEMSIZE:0] i;
+  reg [`ADDRSIZE:0] i;
 
   memory_unit #(
-    .MEMSIZE(`MEMSIZE),
+    .ADDRSIZE(`ADDRSIZE),
     .WORDSIZE(`WORDSIZE)
   ) mu (
+    .rst(rst),
     .wren(wren),
     .rden(rden),
     .addr(addr),
@@ -23,18 +24,20 @@ module memory_unit_tb();
 
   initial
   begin : stimulus
-    wren = 1; rden = 0;
+    rst = 0; wren = 1; rden = 0;
+    #2 rst = 1;
     $display("writing into the memory");
-    for (i = 0; i < `MEMSIZE; i=i+1)
+    for (i = 0; i < `ADDRSIZE; i=i+1)
     begin
-      addr = i; din = `MEMSIZE-i-1;
+      addr = i; din = `ADDRSIZE-i-1;
       #2;
     end
     $display("reading from the memory");
     #2 wren = 0; rden = 1;
-    for (i = 0; i < `MEMSIZE; i=i+1)
+    for (i = 0; i < `ADDRSIZE; i=i+1)
     begin
-      #2 addr = `MEMSIZE-i-1;
+      addr = `ADDRSIZE-i-1;
+      #2;
     end
     #2 rden = 0; addr = 5;
   end
@@ -46,6 +49,6 @@ module memory_unit_tb();
     $vcdpluson;
   end
  
-  initial #(`MEMSIZE*4 + 4 + 10) $finish;
+  initial #(`ADDRSIZE*4 + 4 + 10) $finish;
 
 endmodule

@@ -3,24 +3,39 @@ module memory_unit
   parameter ADDRSIZE = 64,
   WORDSIZE = 64
 ) (
-  input rst,
+  input rst, clk,
   input wren, rden,           // write and read enables
   input [ADDRSIZE-1:0] addr,   // write/read address
   input [WORDSIZE-1:0] d,     // data in
-  output reg [WORDSIZE-1:0] q // data out
+  output [WORDSIZE-1:0] q // data out
 );
   localparam MEMSIZE = 1 << ADDRSIZE;
 
   reg [WORDSIZE-1:0] mem [0:MEMSIZE-1];
 
+  /*
   always @(*) begin
-    if (wren)
+    if (wren) 
+    begin
       mem[addr] = d;
+      q = mem[addr];
+    end
     else if (rden)
       q = mem[addr];
     else
-      q = {WORDSIZE{1'bx}};
+      q = q;
   end
+  */
+
+  always @(posedge clk)
+  begin
+    if (wren)
+      mem[addr] <= d;
+    else
+      mem[addr] <= mem[addr];
+  end
+
+  assign q = mem[addr];
 
   integer i;
   always @(negedge rst)

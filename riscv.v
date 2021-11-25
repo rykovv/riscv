@@ -37,6 +37,7 @@ module riscv(
     .WORDSIZE(`WORDSIZE)
   ) instruction_memory (
     .rst(rst),
+    .clk(),
     .wren(1'b0),
     .rden(1'b1),
     .addr(PC[7:0]), // assuming 256B memory
@@ -61,6 +62,7 @@ module riscv(
     .WORDSIZE(`DWORDSIZE)
   ) rf (
     .rst(rst),
+    .clk(clk),
     .regwr(regwrite),
     .rs1(instruction[19:15]),
     .rs2(instruction[24:20]),
@@ -100,12 +102,19 @@ module riscv(
     .WORDSIZE(`DWORDSIZE)
   ) data_memory (
     .rst(rst),
+    .clk(clk),
     .wren(memwrite),
     .rden(memread),
     .addr(alures[7:0]), // assuming 256B memory
     .d(rs2data),
     .q(readdata)
   );
+
+  integer i;
+  always @(posedge clk)
+    for (i = 0; i < 10; i=i+1) begin
+      $display("rf[%2d] = %2d  |  dm[%2d] = %2d", i, rf.file[i], i, data_memory.mem[i]);
+    end
 
   always @(posedge clk, negedge rst)
   begin
