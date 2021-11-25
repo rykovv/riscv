@@ -4,7 +4,7 @@
 
 module memory_unit_tb();
   wire [`WORDSIZE-1:0] q;
-  reg rst, wren, rden;
+  reg clk, wren, rden;
   reg [`ADDRSIZE-1:0] addr;
   reg [`WORDSIZE-1:0] din;
 
@@ -14,7 +14,7 @@ module memory_unit_tb();
     .ADDRSIZE(`ADDRSIZE),
     .WORDSIZE(`WORDSIZE)
   ) mu (
-    .rst(rst),
+    .clk(clk),
     .wren(wren),
     .rden(rden),
     .addr(addr),
@@ -23,9 +23,15 @@ module memory_unit_tb();
   );
 
   initial
+  begin
+    clk = 0;
+    forever #1 clk = ~clk;
+  end
+
+  initial
   begin : stimulus
-    rst = 0; wren = 1; rden = 0;
-    #2 rst = 1;
+    wren = 1; rden = 0;
+    #2;
     $display("writing into the memory");
     for (i = 0; i < `ADDRSIZE; i=i+1)
     begin
