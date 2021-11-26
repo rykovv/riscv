@@ -25,6 +25,7 @@ module alu_control_tb();
   begin
     $display("TIME	ALUOP	INSTR	ALUCMD");
     $monitor("%2d	%b	%b	%b", $time, aluop, instruction, alucmd);
+    $vcdpluson;
   end
 
   initial #20 $finish;

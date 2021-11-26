@@ -1,5 +1,4 @@
 module alu_control (
-  input rst,               // reset
   input [3:0] instruction, // instruction bits: 30, 14, 13, 12
   input [1:0] aluop,       // signal from the control unit
   output reg [3:0] alucmd  // singal for alu operation
@@ -21,11 +20,6 @@ module alu_control (
       else if (instruction == 4'b0_111) alucmd = AND;
       else if (instruction == 4'b0_110) alucmd = OR;
     end
-  end
-
-  always @(negedge rst)
-  begin
-    alucmd <= 0;
   end
 
 endmodule
