@@ -3,7 +3,7 @@
 `define WORDSIZE    4
 
 module register_file_tb();
-  reg regwr;
+  reg clk, regwr;
   reg [`ADDRSIZE-1:0] rs1, rs2, rd;
   reg [`WORDSIZE-1:0] rddata;
   wire [`WORDSIZE-1:0] rs1data, rs2data;
@@ -12,6 +12,7 @@ module register_file_tb();
     .ADDRSIZE(`ADDRSIZE),
     .WORDSIZE(`WORDSIZE)
   ) rf (
+    .clk(clk),
     .regwr(regwr),
     .rs1(rs1),
     .rs2(rs2),
@@ -20,6 +21,12 @@ module register_file_tb();
     .rs1data(rs1data),
     .rs2data(rs2data)
   );
+
+  initial
+  begin : clk_gen
+    clk = 0;
+    forever #1 clk = ~clk;
+  end
 
   initial
   begin : stimulus
