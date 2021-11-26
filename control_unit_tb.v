@@ -36,6 +36,7 @@ module control_unit_tb();
   begin : monitoring
     $display("TIME	INSTR	BR	MEMREAD	MEMWRITE	MEMTOREG	ALUSRC	REGWRITE	ALUOP");
     $monitor("%2d	%b	%b	%b	%b		%b		%b	%b		%b", $time, instruction, branch, memread, memwrite, memtoreg, alusrc, regwrite, aluop);
+    $vcdpluson;
   end
 
   initial #20 $finish;
