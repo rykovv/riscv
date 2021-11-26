@@ -2,7 +2,6 @@ module immediate_generator #(
   parameter INSTRSIZE = 32,
   IMMSIZE = 64
 ) (
-  input rst,
   input [INSTRSIZE-1:0] instruction,
   output reg signed [IMMSIZE-1:0] immediate
 );
@@ -25,11 +24,6 @@ module immediate_generator #(
         immediate = { {51{instruction[31]}}, instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0 };
       end
     endcase
-  end
-
-  always @(negedge rst)
-  begin
-    immediate <= 0;
   end
 
 endmodule

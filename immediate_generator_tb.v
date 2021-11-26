@@ -41,6 +41,7 @@ module immediate_generator_tb();
   begin : monitoring
     $display("INSTRUCTION						IMMEDIATE");
     $monitor("%b	%d", instruction, immediate);
+    $vcdpluson;
   end
 
   initial #20 $finish;
