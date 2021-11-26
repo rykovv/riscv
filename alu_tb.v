@@ -29,6 +29,7 @@ module alu_tb();
   begin
     $display("TIME	A	B	CTL	R	Z");
     $monitor("%2d	%d	%d	%b	%d	%b", $time, a, b, ctl, r, z);
+    $vcdpluson;
   end
 
   initial #20 $finish;
