@@ -36,8 +36,7 @@ module riscv(
     .ADDRSIZE(`IMEMSIZE),
     .WORDSIZE(`WORDSIZE)
   ) instruction_memory (
-    .rst(rst),
-    .clk(),
+    .clk( ), // no need for writing
     .wren(1'b0),
     .rden(1'b1),
     .addr(PC[7:0]), // assuming 256B memory
@@ -46,7 +45,6 @@ module riscv(
   );
 
   control_unit cu (
-    .rst(rst),
     .instruction(instruction[6:0]), // opcode
     .branch(branch),
     .memread(memread),
@@ -61,7 +59,6 @@ module riscv(
     .ADDRSIZE(`REGADDRSIZE),
     .WORDSIZE(`DWORDSIZE)
   ) rf (
-    .rst(rst),
     .clk(clk),
     .regwr(regwrite),
     .rs1(instruction[19:15]),
@@ -76,13 +73,11 @@ module riscv(
     .INSTRSIZE(`WORDSIZE),
     .IMMSIZE(`DWORDSIZE)
   ) ig (
-    .rst(rst),
     .instruction(instruction),
     .immediate(immediate)
   );
   
   alu_control ac (
-    .rst(rst),
     .instruction( {instruction[30], instruction[14:12]} ),
     .aluop(aluop),
     .alucmd(alucmd)
@@ -91,7 +86,6 @@ module riscv(
   alu #(
     .WORDSIZE(`DWORDSIZE)
   ) alu (
-    .rst(rst),
     .A(rs1data), .B( alusrc ? immediate : rs2data ),
     .CTL(alucmd),
     .R(alures), .Z(aluz)
@@ -101,8 +95,7 @@ module riscv(
     .ADDRSIZE(`DMEMSIZE),
     .WORDSIZE(`DWORDSIZE)
   ) data_memory (
-    .rst(rst),
-    .clk(clk),
+    .clk(clk), // needs clk to write
     .wren(memwrite),
     .rden(memread),
     .addr(alures[7:0]), // assuming 256B memory
@@ -112,8 +105,8 @@ module riscv(
 
   integer i;
   always @(posedge clk)
-    for (i = 0; i < 10; i=i+1) begin
-      $display("rf[%2d] = %2d  |  dm[%2d] = %2d", i, rf.file[i], i, data_memory.mem[i]);
+    for (i = 5; i < 8; i=i+1) begin
+      $display("RegFile[%2d] = %2d  |  DataMem[%2d] = %2d", i, rf.file[i], i, data_memory.mem[i]);
     end
 
   always @(posedge clk, negedge rst)

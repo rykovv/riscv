@@ -33,12 +33,14 @@ module riscv_tb();
   begin
     rst = 0;
     #`CLK_P rst = 1;
-    #(`CLK_P*9) $finish;
+    #(`CLK_P*10) $finish;
   end
 
   initial
   begin
-    $monitor("%2d %b %b %2d %b%b %2d %b %b %b %b %b %b %b",$time, rst, clk, rv.rf.rddata, rv.aluz, rv.branch, rv.PC, rv.instruction, rv.memread, rv.memtoreg, rv.aluop, rv.memwrite, rv.alusrc, rv.regwrite);
+    $display("TIME	RST	CLK	RDDATA	ALUZ	BRANCH	PC	INSTRUCTION	MEMREAD	MEMTORE	APLUOP	MEMWRIT	ALUSRC	REGWRITE");
+    $monitor("%2d 	%b 	%b 	%2d 	%b	%b 	%2d 	%h 	%b 	%b 	%b 	%b 	%b 	%b",$time, rst, clk, rv.rf.rddata, rv.aluz, rv.branch, rv.PC, rv.instruction, rv.memread, rv.memtoreg, rv.aluop, rv.memwrite, rv.alusrc, rv.regwrite);
+    $vcdpluson;
   end
 
 endmodule
